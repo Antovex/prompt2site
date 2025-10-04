@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Header from "./_components/Header";
 
 export default function Home() {
-  return (
-    <div className="flex justify-center items-center h-40">
-      <Button>Testing</Button>
-    </div>
-  );
+    return (
+        <div>
+            <Header />
+        </div>
+    );
 }
