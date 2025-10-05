@@ -15,14 +15,14 @@ const MenuOptions = [
 ]
 
 function Header() {
-    return <div className="flex items-center justify-between p-4 shadow">
+    return <div className="relative flex items-center justify-between p-4 shadow">
         {/* Logo */}
         <div className="flex gap-2 items-center">
             <Image src={'/logo.svg'} alt="logo" width={35} height={35}/>
-            <h2 className="font-bold text-xl">Prompt2Site - AI Website Generator</h2>
+            <h2><span className="font-bold text-xl">Prompt2Site</span><span className="text-xl"> - AI Website Generator</span></h2>
         </div>
-        {/* Menu Options */}
-        <div>
+        {/* Centered Menu Options */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex gap-3">
             {MenuOptions.map((menu, index) => (
                 <Button variant='ghost' key={index}>{menu.name}</Button>
             ))}
