@@ -1,14 +1,9 @@
-import { drizzle } from "drizzle-orm/neon-http";
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 
-export function getDb() {
-    const url = process.env.DATABASE_URL;
-    if (!url) {
-        throw new Error("DATABASE_URL environment variable is not set");
-    }
-    try {
-        return drizzle(url);
-    } catch (error) {
-        console.error("Failed to connect to database:", error);
-        throw error;
-    }
+if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is required');
 }
+
+const sql = neon(process.env.DATABASE_URL);
+export const db = drizzle(sql);
