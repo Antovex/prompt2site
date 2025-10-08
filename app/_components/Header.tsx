@@ -1,10 +1,8 @@
-"use client";
+
 import { Button } from "@/components/ui/button";
-import { SignInButton, useUser } from "@clerk/nextjs";
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
+import AuthButton from "./AuthButton";
 
 const MenuOptions = [
     {
@@ -18,7 +16,6 @@ const MenuOptions = [
 ];
 
 function Header() {
-    const { user } = useUser();
 
     return (
         <div className="relative flex items-center justify-between p-4 shadow">
@@ -38,21 +35,9 @@ function Header() {
                     </Button>
                 ))}
             </div>
-            {/* Getting started Button */}
+            {/* Getting started Button (auth-aware) */}
             <div>
-                {!user ? (
-                    <SignInButton mode="modal" forceRedirectUrl={"/workspace"}>
-                        <Button>
-                            Get Started <ArrowRight />
-                        </Button>
-                    </SignInButton>
-                ) : (
-                    <Link href={"/workspace"}>
-                        <Button>
-                            Get Started <ArrowRight />
-                        </Button>
-                    </Link>
-                )}
+                <AuthButton />
             </div>
         </div>
     );
