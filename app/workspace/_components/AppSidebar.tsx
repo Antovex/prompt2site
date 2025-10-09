@@ -10,13 +10,15 @@ import {
     SidebarHeader,
 } from "@/components/ui/sidebar";
 import { UserDetailContext } from "@/context/UserDetailsContext";
+import { UserButton } from "@clerk/nextjs";
+import { Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
 
 export function AppSidebar() {
     const [projectList, setProjectList] = useState([]);
-    const {userDetail, setUserDetail} = useContext(UserDetailContext);
+    const { userDetail, setUserDetail } = useContext(UserDetailContext);
     // console.log(userDetail);
     return (
         <Sidebar>
@@ -45,16 +47,28 @@ export function AppSidebar() {
                 </SidebarGroup>
                 <SidebarGroup />
             </SidebarContent>
-            <SidebarFooter>
+            <SidebarFooter className="p-2">
                 <div className="p-3 border rounded-xl space-y-3 bg-secondary">
-                    <h2 className="flex justify-between items-center">
+                    <h2>
+                        {" "}
+                        {/* className="flex justify-between items-center" */}
                         Remaining Credits:{" "}
-                        <span className="font-bold">{userDetail?.credits ?? 0}</span>
+                        <span className="font-bold">
+                            {userDetail?.credits ?? 0}
+                        </span>
                     </h2>
                     <Progress value={33} />
-                    <Button className="w-full">
-                        Upgrade to Unlimited
-                    </Button>
+                    <Button className="w-full">Upgrade to Unlimited</Button>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                    <UserButton />
+                        <Button
+                            variant={'outline'}
+                            className="flex item-center"
+                        >
+                            <Settings />
+                            Settings
+                        </Button>
                 </div>
             </SidebarFooter>
         </Sidebar>
