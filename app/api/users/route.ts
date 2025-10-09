@@ -27,12 +27,12 @@ export async function POST(req: NextRequest) {
         if (existingUser?.length === 0) {
             const result = await db.insert(usersTable).values({
                 ...data
-            });
+            }).returning();
             
             // console.log('New user created:', result);
             return NextResponse.json({ 
                 message: "User created successfully", 
-                user: result 
+                user: result[0] 
             });
         }
 

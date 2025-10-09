@@ -17,9 +17,13 @@ function Provider({
     const [userDetail, setUserDetail] = useState<any>();
 
     const CreateNewUser = async () => {
-        const result = await axios.post("/api/users", {});
-        console.log(result.data);
-        setUserDetail(result.data?.user);
+        try {
+            const result = await axios.post("/api/users", {});
+            // console.log(result.data);
+            setUserDetail(result.data?.user);
+        } catch (error) {
+            console.error("Error creating/fetching user:", error);
+        }
     };
 
     return (

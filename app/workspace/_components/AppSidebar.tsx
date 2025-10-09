@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
     Sidebar,
     SidebarContent,
@@ -45,11 +46,15 @@ export function AppSidebar() {
                 <SidebarGroup />
             </SidebarContent>
             <SidebarFooter>
-                <div>
-                    <h2>
+                <div className="p-3 border rounded-xl space-y-3 bg-secondary">
+                    <h2 className="flex justify-between items-center">
                         Remaining Credits:{" "}
                         <span className="font-bold">{userDetail?.credits ?? 0}</span>
                     </h2>
+                    <Progress value={33} />
+                    <Button className="w-full">
+                        Upgrade to Unlimited
+                    </Button>
                 </div>
             </SidebarFooter>
         </Sidebar>
