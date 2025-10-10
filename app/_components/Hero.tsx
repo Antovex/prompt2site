@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import { v4 as uuidv4 } from 'uuid';
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,9 +8,13 @@ import {
     ImagePlus,
     Key,
     LayoutDashboard,
+    Loader2Icon,
     User,
 } from "lucide-react";
-import { SignInButton } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
+import axios from "axios";
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const suggestions = [
     {
@@ -34,8 +39,42 @@ const suggestions = [
     },
 ];
 
+const generateRandomFrameNumber = () => {
+    return Math.floor(Math.random() * 10000);
+}
+
 function Hero() {
     const [userInput, setUserInput] = useState<string>();
+    const {user} = useUser();
+    const router=useRouter();
+    const [loading,setLoading]=useState(false);
+
+    const CreateNewProject = async () => {
+        setLoading(true);
+        const projectId = uuidv4();
+        const frameId = generateRandomFrameNumber();
+        const messages = [{
+            role: "user",
+            content: userInput
+        }]
+        try{
+            const result = await axios.post('/api/projects', {
+                projectId: projectId,
+                frameId: frameId,
+                messages: messages
+            })
+            console.log("Project created successfully: ", result.data);
+            toast.success("Project created successfully!🚀");
+            
+            //Navigate to /playground/[dynamic id]
+            router.push(`/playground/${projectId}?frame=${frameId}`);
+            setLoading(false);
+        } catch(e) {
+            toast.error("Error creating project😞 Internal Server Error💥");
+            console.log("Error creating project: ", e);
+            setLoading(false);
+        }
+    }
 
     return (
         <div className="flex flex-col items-center h-[80vh] justify-center">
@@ -56,19 +95,33 @@ function Hero() {
                     <Button variant={"ghost"}>
                         <ImagePlus />
                     </Button>
-                    <SignInButton mode="modal" forceRedirectUrl={"/workspace"}>
-                    <Button disabled={!userInput}>
-                        <ArrowUp />
-                    </Button>
-                    </SignInButton>
+                    {!user ? (
+                        <SignInButton
+                            mode="modal"
+                            forceRedirectUrl={"/workspace"}
+                        >
+                            <Button disabled={!userInput}>
+                                <ArrowUp />
+                            </Button>
+                        </SignInButton>
+                    ) : (
+                        <Button disabled={!userInput || loading} onClick={CreateNewProject}>
+                            {loading ? <Loader2Icon className='animate-spin'/> : <ArrowUp />}
+                        </Button>
+                    )}
                 </div>
             </div>
             {/* Suggestion list */}
             <div className="mt-4 flex gap-3">
                 {suggestions.map((suggestion, index) => (
-                    <Button key={index} variant={"outline"} onClick={() => setUserInput(suggestion.prompt)}>
+                    <Button
+                        key={index}
+                        variant={"outline"}
+                        onClick={() => setUserInput(suggestion.prompt)}
+                    >
                         <suggestion.icon />
-                        {suggestion.label}</Button>
+                        {suggestion.label}
+                    </Button>
                 ))}
             </div>
         </div>
