@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Provider from "./provider";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
     title: {
@@ -52,7 +53,10 @@ export default function RootLayout({
         <ClerkProvider>
             <html lang="en" className={outfitFont.variable}>
                 <body className={outfitFont.className}>
-                    <Provider>{children}</Provider>
+                    <Provider>
+                        {children}
+                        <Toaster />
+                    </Provider>
                 </body>
             </html>
         </ClerkProvider>
