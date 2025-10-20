@@ -50,28 +50,74 @@ function Hero() {
     const [loading,setLoading]=useState(false);
 
     const CreateNewProject = async () => {
+        if (!userInput?.trim()) {
+            toast.error("Please enter a design description");
+            return;
+        }
+
         setLoading(true);
         const projectId = uuidv4();
         const frameId = generateRandomFrameNumber();
         const messages = [{
             role: "user",
             content: userInput
-        }]
-        try{
+        }];
+
+        try {
             const result = await axios.post('/api/projects', {
                 projectId: projectId,
                 frameId: frameId,
                 messages: messages
-            })
-            console.log("Project created successfully: ", result.data);
-            toast.success("Project created successfully!🚀");
+            });
+
+            if (result.data.success) {
+                console.log("Project created successfully: ", result.data);
+                toast.success("Project created successfully! 🚀", {
+                    description: "Redirecting to playground...",
+                });
+                
+                // Navigate to /playground/[dynamic id]
+                router.push(`/playground/${projectId}?frame=${frameId}`);
+            } else {
+                throw new Error("Unexpected response format");
+            }
+        } catch (error: any) {
+            console.error("Error creating project: ", error);
             
-            //Navigate to /playground/[dynamic id]
-            router.push(`/playground/${projectId}?frame=${frameId}`);
-            setLoading(false);
-        } catch(e) {
-            toast.error("Error creating project😞 Internal Server Error💥");
-            console.log("Error creating project: ", e);
+            // Handle different error scenarios
+            if (error.response) {
+                const status = error.response.status;
+                const errorMessage = error.response.data?.error;
+
+                if (status === 401) {
+                    toast.error("Authentication required", {
+                        description: "Please sign in to create a project.",
+                    });
+                } else if (status === 400) {
+                    toast.error("Invalid input", {
+                        description: errorMessage || "Please check your input and try again.",
+                    });
+                } else if (status === 409) {
+                    toast.error("Project already exists", {
+                        description: "This project ID is already in use. Please try again.",
+                    });
+                    // Retry with new ID
+                    setTimeout(() => CreateNewProject(), 1000);
+                } else {
+                    toast.error("Failed to create project", {
+                        description: errorMessage || "An unexpected error occurred. Please try again.",
+                    });
+                }
+            } else if (error.request) {
+                toast.error("Network error", {
+                    description: "Unable to connect to the server. Please check your internet connection.",
+                });
+            } else {
+                toast.error("Error", {
+                    description: "An unexpected error occurred. Please try again.",
+                });
+            }
+        } finally {
             setLoading(false);
         }
     }
