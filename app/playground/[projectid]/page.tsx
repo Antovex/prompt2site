@@ -8,16 +8,16 @@ import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 
 export type FrameType = {
-    projectId: string,
-    frameId: string,
-    designCode: string,
-    chatMessages: MessagesType[],
-}
+    projectId: string;
+    frameId: string;
+    designCode: string;
+    chatMessages: MessagesType[];
+};
 
 export type MessagesType = {
-    role: string,
-    content: string,
-}
+    role: string;
+    content: string;
+};
 
 function Playground() {
     const { projectid } = useParams();
@@ -37,13 +37,18 @@ function Playground() {
         setFrameDetails(result.data);
     };
 
+    const SendMessage = (userInput: string) => {};
+
     return (
         <div>
             <PlaygroundHeader />
 
             <div className="flex">
                 {/* Chats Section */}
-                <ChatSection messages={frameDetails?.chatMessages??[]}/>
+                <ChatSection
+                    messages={frameDetails?.chatMessages ?? []}
+                    onSend={(input: string) => SendMessage(input)}
+                />
 
                 {/* WebsiteDesign Section */}
                 <WebsiteDesign />
