@@ -84,7 +84,53 @@ function Playground() {
         }
     };
 
-    const SendMessage = (userInput: string) => {};
+    const SendMessage = async (userInput: string) => {
+        if (!userInput?.trim()) {
+            toast.error("Please enter a message");
+            return;
+        }
+
+        try {
+            // Add user message to local state optimistically
+            const userMessage: MessagesType = {
+                role: "user",
+                content: userInput,
+            };
+
+            setFrameDetails((prev) => ({
+                ...prev!,
+                chatMessages: [...(prev?.chatMessages ?? []), userMessage],
+            }));
+
+            // TODO: Implement AI chat API endpoint
+            // const result = await axios.post('/api/chat', {
+            //     frameId: frameId,
+            //     projectId: projectid,
+            //     message: userInput,
+            // });
+
+            toast.info("AI chat coming soon!", {
+                description: "This feature is under development.",
+            });
+
+            // TODO: Add AI response to chat
+            // const aiMessage: MessagesType = {
+            //     role: "assistant",
+            //     content: result.data.response,
+            // };
+            // setFrameDetails((prev) => ({
+            //     ...prev!,
+            //     chatMessages: [...(prev?.chatMessages ?? []), aiMessage],
+            // }));
+        } catch (error: any) {
+            console.error("Error sending message:", error);
+            toast.error("Failed to send message", {
+                description:
+                    error.response?.data?.error ||
+                    "An error occurred while sending your message.",
+            });
+        }
+    };
 
     return (
         <div>

@@ -14,12 +14,36 @@ import { UserButton } from "@clerk/nextjs";
 import { Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "sonner";
 
 export function AppSidebar() {
     const [projectList, setProjectList] = useState([]);
+    const [loading, setLoading] = useState(false);
     const { userDetail, setUserDetail } = useContext(UserDetailContext);
-    // console.log(userDetail);
+
+    useEffect(() => {
+        // TODO: Implement project fetching when API endpoint is ready
+        // userDetail && GetUserProjects();
+    }, [userDetail]);
+
+    const GetUserProjects = async () => {
+        try {
+            setLoading(true);
+            // TODO: Create /api/projects GET endpoint to fetch user's projects
+            // const result = await axios.get('/api/projects');
+            // setProjectList(result.data.projects);
+        } catch (error: any) {
+            console.error("Error fetching projects:", error);
+            toast.error("Failed to load projects", {
+                description: error.response?.data?.error || "Unable to load your projects.",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <Sidebar>
             <SidebarHeader className="p-5">
@@ -39,10 +63,19 @@ export function AppSidebar() {
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>Projects</SidebarGroupLabel>
-                    {projectList.length == 0 && (
+                    {loading ? (
+                        <p className="text-sm px-2 text-gray-500">Loading projects...</p>
+                    ) : projectList.length === 0 ? (
                         <h2 className="text-sm px-2 text-gray-500">
                             No Project found
                         </h2>
+                    ) : (
+                        projectList.map((project: any, index) => (
+                            <div key={index} className="px-2 py-1">
+                                {/* TODO: Add project list item component */}
+                                {project.name}
+                            </div>
+                        ))
                     )}
                 </SidebarGroup>
                 <SidebarGroup />

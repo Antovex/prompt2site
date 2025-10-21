@@ -12,9 +12,16 @@ function ChatSection({ messages, onSend }: Props) {
     const [input, setInput] = useState<string>();
 
     const handleSend = () => {
-        if (!input?.trim) return;
-        onSend(input);
-        setInput("");
+        if (!input?.trim()) {
+            return;
+        }
+        
+        try {
+            onSend(input);
+            setInput("");
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
     };
 
     return (
@@ -54,8 +61,14 @@ function ChatSection({ messages, onSend }: Props) {
                     placeholder="Describe your website idea..."
                     className="flex-1 resize-none border rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
                     onChange={(event) => setInput(event.target.value)}
+                    onKeyDown={(event) => {
+                        if (event.key === "Enter" && !event.shiftKey) {
+                            event.preventDefault();
+                            handleSend();
+                        }
+                    }}
                 />
-                <Button>
+                <Button onClick={handleSend} disabled={!input?.trim()}>
                     {" "}
                     <ArrowUp />{" "}
                 </Button>
