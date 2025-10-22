@@ -55,7 +55,7 @@ function ChatSection({ messages, onSend }: Props) {
                     className="flex-1 resize-none border rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
                     onChange={(event) => setInput(event.target.value)}
                 />
-                <Button>
+                <Button onClick={handleSend}>
                     {" "}
                     <ArrowUp />{" "}
                 </Button>
