@@ -12,7 +12,7 @@ function ChatSection({ messages, onSend }: Props) {
     const [input, setInput] = useState<string>();
 
     const handleSend = () => {
-        if (!input?.trim) return;
+        if (!input?.trim()) return;
         onSend(input);
         setInput("");
     };
@@ -55,7 +55,7 @@ function ChatSection({ messages, onSend }: Props) {
                     className="flex-1 resize-none border rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
                     onChange={(event) => setInput(event.target.value)}
                 />
-                <Button onClick={handleSend}>
+                <Button onClick={handleSend} disabled={!input?.trim?.()}> 
                     {" "}
                     <ArrowUp />{" "}
                 </Button>
