@@ -5,10 +5,11 @@ import { ArrowUp } from "lucide-react";
 
 type Props = {
     messages: MessagesType[];
-    onSend: any;
+    onSend: (input: string) => void | Promise<void>;
+    disabled?: boolean;
 };
 
-function ChatSection({ messages, onSend }: Props) {
+function ChatSection({ messages, onSend, disabled }: Props) {
     const [input, setInput] = useState<string>();
 
     const handleSend = () => {
@@ -61,6 +62,7 @@ function ChatSection({ messages, onSend }: Props) {
                     placeholder="Describe your website idea..."
                     className="flex-1 resize-none border rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
                     onChange={(event) => setInput(event.target.value)}
+                    disabled={disabled}
                     onKeyDown={(event) => {
                         if (event.key === "Enter" && !event.shiftKey) {
                             event.preventDefault();
@@ -68,7 +70,7 @@ function ChatSection({ messages, onSend }: Props) {
                         }
                     }}
                 />
-                <Button onClick={handleSend} disabled={!input?.trim()}>
+                <Button onClick={handleSend} disabled={!input?.trim() || !!disabled}>
                     {" "}
                     <ArrowUp />{" "}
                 </Button>
