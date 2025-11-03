@@ -7,9 +7,10 @@ type Props = {
     messages: MessagesType[];
     onSend: (input: string) => void | Promise<void>;
     disabled?: boolean;
+    loading: boolean;
 };
 
-function ChatSection({ messages, onSend, disabled }: Props) {
+function ChatSection({ messages, onSend, disabled, loading }: Props) {
     const [input, setInput] = useState<string>();
 
     const handleSend = () => {
@@ -52,6 +53,16 @@ function ChatSection({ messages, onSend, disabled }: Props) {
                             </div>
                         </div>
                     ))
+                )}
+
+                {loading && (
+                    <div className="flex justify-center items-center p-4">
+                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-zinc-800">
+                        </div>
+                            <span className="ml-2 text-zinc-800">
+                                Working on your request...
+                            </span>
+                    </div>
                 )}
             </div>
 

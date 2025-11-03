@@ -86,6 +86,10 @@ function Playground() {
             );
             console.log("Frame Details: ", result.data);
             setFrameDetails(result.data);
+            if(result.data?.chatMessages?.length == 1){
+            const userMsg = result.data.chatMessages[0].content;
+            SendMessage(userMsg);
+            }
         } catch (error: any) {
             console.error("Error fetching frame details:", error);
 
@@ -244,7 +248,6 @@ function Playground() {
     return (
         <div>
             <PlaygroundHeader />
-
             {frameLoading ? (
                 <div className="flex items-center justify-center h-[calc(100vh-80px)]">
                     <div className="text-center">
@@ -266,8 +269,8 @@ function Playground() {
                             messages={messages ?? []}
                             onSend={(input: string) => SendMessage(input)}
                             disabled={sending}
+                            loading={loading}
                     />
-
                     {/* WebsiteDesign Section */}
                     <WebsiteDesign />
 
