@@ -269,7 +269,7 @@ function Playground() {
                             messages={messages ?? []}
                             onSend={(input: string) => SendMessage(input)}
                             disabled={sending}
-                            loading={loading}
+                loading={sending}
                     />
                     {/* WebsiteDesign Section */}
                     <WebsiteDesign />

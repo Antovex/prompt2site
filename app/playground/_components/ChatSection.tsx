@@ -13,13 +13,13 @@ type Props = {
 function ChatSection({ messages, onSend, disabled, loading }: Props) {
     const [input, setInput] = useState<string>();
 
-    const handleSend = () => {
-        if (!input?.trim()) {
+    const handleSend = async () => {
+        if (!input?.trim() || disabled) {
             return;
         }
-        
+
         try {
-            onSend(input);
+            await onSend(input);
             setInput("");
         } catch (error) {
             console.error("Error sending message:", error);
