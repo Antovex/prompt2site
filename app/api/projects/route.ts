@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
     const chatResult = await db
         .insert(chatTable)
         .values({
+            frameId: frameId,
             chatMessages: messages,
             createdBy: user?.primaryEmailAddress?.emailAddress,
         })

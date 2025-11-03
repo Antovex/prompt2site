@@ -20,14 +20,18 @@ export async function GET(req: NextRequest) {
             )
         );
 
+    console.log("Frame Result: ", frameResult);
+
     const chatResult = await db.select().from(chatTable).where(
         //@ts-ignore
         eq(chatTable.frameId, frameId)
     );
 
+    console.log("Chat Result: ", chatResult);
+
     const finalResult = {
         ...frameResult[0],
-        chatMessages: chatResult[0].chatMessages,
+        chatMessages: chatResult[0]?.chatMessages || [],
     };
 
     return NextResponse.json(finalResult);

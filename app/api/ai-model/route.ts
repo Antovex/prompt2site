@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         }
 
         const baseUrl = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1";
-        const model = process.env.OPENROUTER_MODEL || "meta-llama/llama-4-scout:free";
+        const model = process.env.OPENROUTER_MODEL || "minimax/minimax-m2:free";
         const referer = process.env.NEXT_PUBLIC_APP_URL || req.headers.get("origin") || "http://localhost:3000";
 
         const upstream = await fetch(`${baseUrl}/chat/completions`, {

@@ -78,6 +78,10 @@ function Playground() {
         );
         console.log("Frame Details: ", result.data);
         setFrameDetails(result.data);
+        if(result.data?.chatMessages?.length == 1){
+            const userMsg = result.data.chatMessages[0].content;
+            SendMessage(userMsg);
+        }
     };
 
     // Seed local chat state with frame messages when they load
@@ -162,6 +166,7 @@ function Playground() {
                 <ChatSection
                     messages={messages ?? []}
                     onSend={(input: string) => SendMessage(input)}
+                    loading={loading}
                 />
 
                 {/* WebsiteDesign Section */}
